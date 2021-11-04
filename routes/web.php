@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 
 /*
@@ -37,7 +39,7 @@ Route::get('/arrays-with-php', function () use ($values) {
 });
 
 
-Route::get('arrays-with-collection', function () use ($values) {
+Route::get('/arrays-with-collection', function () use ($values) {
 
     // 1. Forma de crear
     // $collection = new Collection($values);
@@ -62,7 +64,7 @@ Route::get('arrays-with-collection', function () use ($values) {
 });
 
 
-Route::get('function-collections', function () {
+Route::get('/function-collections', function () {
 
 
     $data = [
@@ -85,4 +87,57 @@ Route::get('function-collections', function () {
 
     return $productWithStock;
 
+});
+
+
+Route::get('/function-collections-2', function () use ($values) {
+
+    $numbers = collect($values);
+    // Divide el array en las porciones especifcadas por parametro
+    $numbersSplit = $numbers->split(3);
+
+    // Divide el array armando tantas diviciones para cumplir con el valor del parametro
+    $numbersChunck = $numbers->chunk(3);
+
+});
+
+
+Route::get('/trasnform-from-api-with-collections', function () {
+    $apiUrl = url('api/external-videos'); // http://localhost/laravel/laravel-collection/public/api/external-videos
+
+
+    $response = Http::get($apiUrl);
+
+    // parseando a json lo obtenido y obteniendo la llave data
+    $data = $response->json()['data'];
+
+
+    return collect($data)
+        // para cada registro
+        ->map(function ($row) {
+            return [
+                'title' => $row['title'],
+                'description' => $row['description'],
+                'length' => $row['length'],
+                'score' => $row['likes'] + $row['views'],
+                'channel' => $row['channel']['name'],
+                'author' => $row['channel']['author']['name'],
+                // separa el estrin por comas, y cada palabra como mayus
+                'tags' => collect(explode(',', $row['tags']))
+                    ->map(function ($tag) {
+                        return ucfirst($tag);
+                    })
+                    ->all(),
+                'playlist' => $row['playlist'],
+            ];
+        })
+        // Los resultados los agrupa por la llave pasada por parametro
+        ->groupBy('playlist')
+        ->map(function ($videos, $playlistName) {
+            return [
+                'name' => Str::title($playlistName),
+                'length' => $videos->sum('length'),
+                'videos' => $videos
+            ];
+        });
 });
