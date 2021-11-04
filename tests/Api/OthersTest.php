@@ -29,7 +29,10 @@ class OthersTest extends TestCase
         // peticion a url
         $this->get('function-collections')
             // verificara si es exactamente el mismo json obtenido
-            ->assertJson($this->collection1)
+            ->assertExactJson($this->collection1)
+
+            // Debe contener al menos lo pasado por parametro, no importa si retorna mas
+            // ->assertJson($this->collection1)
             // Verifica el codigo de status
             ->assertStatus(200);
     }
