@@ -5,6 +5,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
+use Illuminate\Translation\Translator;
 
 
 /*
@@ -153,3 +154,34 @@ Route::get('/trasnform-from-api-with-collections', function () {
 Route::get('posts/{post:slug}', function (Post $post) {
     return $post;
 });
+
+
+/*
+ * Usando la clase de manipulacion de Str, para manipularla de forma fluida
+ * */
+
+Route::get('strings/{string}', function (string $string) {
+
+    // Convertir una cadena en formato «camelCase»:
+    dump(Str::of('create_notes')->camel()); //createNotes
+
+    // Verificar si una cadena contiene una sub-cadena:
+    dump(Str::of('Laravel is a great framework')->contains('Laravel')); // true
+
+    // Dividir una cadena y convertirla en una colección:
+    dump(Str::of('HTML, CSS, JS')->explode(', '));
+
+    // Revisar si una cadena coincide con cierto patrón:
+    dump(Str::of('inv-09-04-2020')->is('inv*2020')); // true
+
+    // Determinar si una cadena no está vacía:
+    dump(Str::of('  ')->trim()->isEmpty()); // true
+
+    $newString = Str::of($string)
+        ->replace('-', '')
+        ->slug()
+        ->prepend('al inicio ')
+        ->finish(' al final');
+    dump($newString);
+});
+

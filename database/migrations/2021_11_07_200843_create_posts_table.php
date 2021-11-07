@@ -23,7 +23,7 @@ class CreatePostsTable extends Migration
                 ->references('id')
                 ->on('users')
                 ->cascadeOnDelete();
-            
+
             $table->timestamps();
         });
     }
