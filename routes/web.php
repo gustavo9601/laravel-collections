@@ -185,3 +185,12 @@ Route::get('strings/{string}', function (string $string) {
     dump($newString);
 });
 
+/*
+ * Usando la nueva forma de llamar el controlador y especificar el metodo
+ *
+ * '/path', [controller, 'metodo']
+ * */
+Route::get('/posts', [\App\Http\Controllers\PostController::class, 'index']);
+
+// Ruta de recurso
+// Route::resource('/posts', PhotoController::class)->only(['index', 'show']);
