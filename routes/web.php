@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Post;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
@@ -140,4 +141,15 @@ Route::get('/trasnform-from-api-with-collections', function () {
                 'videos' => $videos
             ];
         });
+});
+
+
+/*
+ * Modificando en la ruta el ID por el cual se puede buscar en la BD el parametro
+ *
+ * // Para el modelo post usara la columna slug para hacer la consulta
+ * post:slug
+ * */
+Route::get('posts/{post:slug}', function (Post $post) {
+    return $post;
 });
