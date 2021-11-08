@@ -8,6 +8,6 @@ use Illuminate\Http\Request;
 class PostController extends Controller
 {
     public function index(){
-        return Post::with(['user'])->idget();
+        return Post::with(['user'])->get();
     }
 }
