@@ -193,3 +193,10 @@ Route::get('/posts', [\App\Http\Controllers\PostController::class, 'index']);
 
 // Ruta de recurso
 // Route::resource('/posts', PhotoController::class)->only(['index', 'show']);
+
+/*
+ * Usando el helper ddd que es el mismo a dd pero con Ignition
+ * */
+Route::get('/ddd', function(){
+   ddd(Post::all());
+});
